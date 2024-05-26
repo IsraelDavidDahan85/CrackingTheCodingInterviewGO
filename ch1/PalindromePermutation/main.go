@@ -6,7 +6,7 @@ package main
 // dictionary words.
 // EXAMPLE
 // Input: Tact Coa
-// Output: True (permutations: "taco cat'; "atc o eta·; etc.)
+// Output: True (permutations: "taco cat", "atco cta", etc.)
 
 import (
 	"fmt"
@@ -14,8 +14,9 @@ import (
 )
 
 func main() {
-	str := "Tact Coa"
+	str := "abcdefghijklmnopqrstuvwxyz zyxwvutsrqponmlkjihgfedcba"
 	fmt.Println(isPalindromePermutation(str))
+	fmt.Println(isPalindromePermutationBit(str))
 }
 
 func isPalindromePermutation(str string) bool {
@@ -38,8 +39,35 @@ func isPalindromePermutation(str string) bool {
 	return oddCount <= 1
 }
 
-// Output:
-// true
+func isPalindromePermutationBit(str string) bool {
+	str = strings.ToLower(str)
+	str = strings.Replace(str, " ", "", -1)
 
-// Time complexity: O(n)
-// Space complexity: O(n)
+	bitVector := 0
+
+	for _, char := range str {
+		if char >= 'a' && char <= 'z' {
+			bitVector = toggle(bitVector, char-'a')
+		}
+	}
+	//fmt.Printf("Bit vector: %b\n", bitVector)
+	//fmt.Printf("Bit vector-1: %b\n", bitVector-1)
+	return bitVector == 0 || (bitVector&(bitVector-1)) == 0
+}
+
+func toggle(bitVector int, index rune) int {
+	if index < 0 {
+		return bitVector
+	}
+
+	mask := 1 << uint(index)
+
+	if (bitVector & mask) == 0 {
+		bitVector |= mask
+	} else {
+		bitVector &= ^mask
+	}
+	//fmt.Printf("Mask: %b\n", mask) // Print bitVector as a binary string
+	//fmt.Printf("Bit vector: %b\n", bitVector) // Print bitVector as a binary string
+	return bitVector
+}
