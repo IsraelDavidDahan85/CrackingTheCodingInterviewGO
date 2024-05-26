@@ -16,7 +16,8 @@ import (
 func main() {
 	str := "abcdefghijklmnopqrstuvwxyz zyxwvutsrqponmlkjihgfedcba"
 	fmt.Println(isPalindromePermutation(str))
-	fmt.Println(isPalindromePermutationBit(str))
+	fmt.Println(isPalindromePermutationByTable(str))
+	fmt.Println(isPalindromePermutationByBit(str))
 }
 
 func isPalindromePermutation(str string) bool {
@@ -39,7 +40,27 @@ func isPalindromePermutation(str string) bool {
 	return oddCount <= 1
 }
 
-func isPalindromePermutationBit(str string) bool {
+func isPalindromePermutationByTable(str string) bool {
+	str = strings.ToLower(str)
+	str = strings.Replace(str, " ", "", -1)
+
+	table := make([]int, 26)
+	oddCount := 0
+
+	for _, char := range str {
+		if char >= 'a' && char <= 'z' {
+			table[char-'a']++
+			if table[char-'a']%2 != 0 {
+				oddCount++
+			} else {
+				oddCount--
+			}
+		}
+	}
+	return oddCount <= 1
+}
+
+func isPalindromePermutationByBit(str string) bool {
 	str = strings.ToLower(str)
 	str = strings.Replace(str, " ", "", -1)
 
